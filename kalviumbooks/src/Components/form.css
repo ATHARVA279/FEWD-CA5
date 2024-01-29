@@ -1,6 +1,6 @@
 .mainBox{
     width: 400px;
-    height: 500px;
+    height: auto;
     border-radius: 10px;
     display: flex;
     align-items: center;
