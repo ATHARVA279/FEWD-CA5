@@ -1,143 +1,15 @@
 import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
-import './form.css'
+import './form.css';
 
-const RegistrationForm = () => {
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        password: '',
-        repeatPassword: '',
-    });
-
-    const [validationErrors, setValidationErrors] = useState({
-        name: '',
-        email: '',
-        password: '',
-        repeatPassword: '',
-        general: '',
-    });
-
+const Form = () => {
+    const { register, handleSubmit, formState: { errors }, getValues } = useForm();
     const [registrationComplete, setRegistrationComplete] = useState(false);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-
-        validateInput(name, value);
-    };
-
-    const validateInput = (name, value) => {
-        if (value === '') {
-            setValidationErrors({
-                ...validationErrors,
-                [name]: '',
-            });
-            return;
-        }
-
-        switch (name) {
-            case 'name':
-                if (value.length < 3) {
-                    setValidationErrors({
-                        ...validationErrors,
-                        [name]: 'Name should be at least 3 characters.',
-                    });
-                } else if (value.length > 30) {
-                    setValidationErrors({
-                        ...validationErrors,
-                        [name]: 'Name should be less than 30 characters.',
-                    });
-                } else {
-                    setValidationErrors({
-                        ...validationErrors,
-                        [name]: '',
-                    });
-                }
-                break;
-            case 'email':
-                if (!/^\S+@\S+\.\S+$/.test(value)) {
-                    setValidationErrors({
-                        ...validationErrors,
-                        [name]: 'Invalid email format, should be eg - example@abc.com',
-                    });
-                } else {
-                    setValidationErrors({
-                        ...validationErrors,
-                        [name]: '',
-                    });
-                }
-                break;
-            case 'password':
-                if (value.length < 10) {
-                    setValidationErrors({
-                        ...validationErrors,
-                        [name]: 'Password should be at least 10 characters.',
-                    });
-                } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
-                    setValidationErrors({
-                        ...validationErrors,
-                        [name]: 'Password should contain at least 1 special character.',
-                    });
-                } else {
-                    setValidationErrors({
-                        ...validationErrors,
-                        [name]: '',
-                    });
-                }
-                break;
-            case 'repeatPassword':
-                if (value !== formData.password) {
-                    setValidationErrors({
-                        ...validationErrors,
-                        [name]: 'Passwords do not match.',
-                    });
-                } else {
-                    setValidationErrors({
-                        ...validationErrors,
-                        [name]: '',
-                    });
-                }
-                break;
-            default:
-                break;
-        }
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        if (Object.values(formData).some((value) => value === '')) {
-            setValidationErrors({
-                ...validationErrors,
-                general: 'Please fill in all fields.',
-            });
-            return;
-        }
-
-        if (
-            Object.values(validationErrors).every(
-                (error) => error === '' || error === undefined
-            )
-        ) {
-            setValidationErrors({
-                ...validationErrors,
-                general: '',
-            });
-
-            console.log('Form submitted:', formData);
-
-            setRegistrationComplete(true);
-        } else {
-            console.log('Form has validation errors. Please correct them.');
-        }
-    };
-
-    const handleRedirectToHomePage = () => {
-        console.log('Redirecting to the home page...');
+    const onSubmit = (data) => {
+        console.log(data);
+        setRegistrationComplete(true);
     };
 
     return (
@@ -146,22 +18,31 @@ const RegistrationForm = () => {
                 <div className='mainBox'>
                     <p className='done'>Registration is complete. Thank you!</p>
                     <Link to="/">
-                        <button onClick={handleRedirectToHomePage} className='regBtn doneBtn'>Go to Home Page</button>
+                        <button className='regBtn doneBtn'>Go to Home Page</button>
                     </Link>
                 </div>
             ) : (
                 <div className='mainBox'>
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit(onSubmit)}>
                         <div className='formIn'>
                             <label htmlFor="name">Name:</label>
                             <input
                                 type="text"
                                 id="name"
                                 name="name"
-                                value={formData.name}
-                                onChange={handleChange}
+                                {...register('name', {
+                                    required: 'Name is required',
+                                    minLength: {
+                                        value: 3,
+                                        message: 'Name should be at least 3 characters long',
+                                    },
+                                    maxLength: {
+                                        value: 30,
+                                        message: 'Password should be at most 30 characters long',
+                                    },
+                                })}
                             />
-                            <p className="error-message">{validationErrors.name}</p>
+                            <p className="error-message">{errors.name?.message}</p>
                         </div>
                         <div className='formIn'>
                             <label htmlFor="email">Email:</label>
@@ -169,10 +50,16 @@ const RegistrationForm = () => {
                                 type="email"
                                 id="email"
                                 name="email"
-                                value={formData.email}
-                                onChange={handleChange}
+                                onChange={(e) => handleInputChange('email', e.target.value)}
+                                {...register('email', {
+                                    required: 'Email is required',
+                                    pattern: {
+                                        value: /^\S+@\S+\.\S+$/,
+                                        message: 'Invalid email format, should be example@abc.com',
+                                    },
+                                })}
                             />
-                            <p className="error-message">{validationErrors.email}</p>
+                            <p className="error-message">{errors.email?.message}</p>
                         </div>
                         <div className='formIn'>
                             <label htmlFor="password">Password:</label>
@@ -180,23 +67,36 @@ const RegistrationForm = () => {
                                 type="password"
                                 id="password"
                                 name="password"
-                                value={formData.password}
-                                onChange={handleChange}
+                                {...register('password', {
+                                    required: 'Password is required',
+                                    minLength: {
+                                        value: 10,
+                                        message: 'Password should be at least 10 characters long',
+                                    },
+                                    pattern: {
+                                        value: /^(?=.*[!@#$%^&*(),.?":{}|<>])/,  
+                                        message: 'Password should contain at least 1 special character',
+                                    },
+                                })}
                             />
-                            <p className="error-message">{validationErrors.password}</p>
+                            <p className="error-message">{errors.password?.message}</p>
                         </div>
+
                         <div className='formIn'>
                             <label htmlFor="repeatPassword">Repeat Password:</label>
                             <input
                                 type="password"
                                 id="repeatPassword"
                                 name="repeatPassword"
-                                value={formData.repeatPassword}
-                                onChange={handleChange}
+                                {...register('repeatPassword', {
+                                    required: 'Repeat Password is required',
+                                    validate: (value) =>
+                                        value === getValues('password') || 'Passwords do not match',
+                                })}
                             />
-                            <p className="error-message">{validationErrors.repeatPassword}</p>
+                            <p className="error-message">{errors.repeatPassword?.message}</p>
                         </div>
-                        <p className="error-message last">{validationErrors.general}</p>
+                        <p className="error-message last">{errors.general?.message}</p>
                         <button type="submit" className='regBtn sub'>Sign Up</button>
                     </form>
                 </div>
@@ -205,4 +105,4 @@ const RegistrationForm = () => {
     );
 };
 
-export default RegistrationForm;
+export default Form;
