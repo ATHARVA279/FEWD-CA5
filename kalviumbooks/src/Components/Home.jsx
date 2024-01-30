@@ -38,7 +38,7 @@ function Home({ searchInput }) {
             <h1>{ele.title}</h1>
           </div>
           <div className='stars'>
-            <h3 className='rate'> <span style={{color:"yellow"}}>☆</span>  {ele.averageRating ? ele.averageRating : 'NA'}</h3>
+            <h3 className='rate'>☆ {ele.averageRating ? ele.averageRating : 'NA'}</h3>
             <h2 style={{ color: "green" }}>FREE</h2>
           </div>
         </div>

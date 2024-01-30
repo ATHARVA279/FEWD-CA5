@@ -197,7 +197,7 @@ const RegistrationForm = () => {
                             <p className="error-message">{validationErrors.repeatPassword}</p>
                         </div>
                         <p className="error-message last">{validationErrors.general}</p>
-                        <button type="submit" className='regBtn sub'>Submit</button>
+                        <button type="submit" className='regBtn sub'>Sign Up</button>
                     </form>
                 </div>
             )}
