@@ -25,10 +25,6 @@
     background-color: #28293D;
 }
 
-.book:hover{
-    background-color: #eeeeee;
-}
-
 .image{
     display: flex;
     align-items: center;
