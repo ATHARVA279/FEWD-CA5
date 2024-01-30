@@ -1,3 +1,4 @@
+/* Getting the font family form google fonts */
 @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville&display=swap');
 
 .main{
@@ -11,6 +12,7 @@
     padding-top: 70px;
 }
 
+/* The books Card */
 .book{
     height: 490px;
     width: 320px;

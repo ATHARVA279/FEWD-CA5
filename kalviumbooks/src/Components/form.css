@@ -1,5 +1,6 @@
+/* The form box */
 .mainBox{
-    width: 400px;
+    width: 510px;
     height: auto;
     border-radius: 10px;
     display: flex;
@@ -11,12 +12,14 @@
     margin-bottom: 20px;
 }
 
+/* Background Div */
 .main1{
     display: flex;
     align-items: center;
     justify-content: center;
     padding-top: 70px;
 }
+
 
 .formIn{
     width: 100%;
@@ -26,22 +29,23 @@
 }
 
 .formIn>label{
-    font-size: 30px;
+    font-size: 25px;
 }
 
 .formIn>input{
-    width: 300px;
+    width: 450px;
     height: 40px;
     outline: none;
-    font-size: 30px;
+    font-size: 23px;
     padding-left: 5px;
 }
 
+/* Submit button */
 .sub{
-    height: 30px;
+    height: 40px;
     font-size: 30px;
-    width: 100px;
-    margin-left: 120px;
+    width: 130px;
+    margin-left: 180px;
     margin-bottom: 10px;
 }
 
@@ -60,10 +64,13 @@ p{
 .done{
     font-size: 30px;
     color: rgb(43, 230, 43);
+    text-align: center;
 }
 
+/* The done button which comes when the form is submitted */
 .doneBtn{
     font-size: 30px;
     margin: 20px;
     padding: 10px;
+    width: auto;
 }

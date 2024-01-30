@@ -5,8 +5,9 @@ import Home from './Components/Home';
 import Form from './Components/Form';
 
 function App() {
+  //Setting the state for the searched letters
   const [searchInput, setSearchInput] = useState('');
-
+  //setting the value 
   const handleSearchInputChange = (inputValue) => {
     setSearchInput(inputValue);
   };
@@ -17,6 +18,7 @@ function App() {
       <Routes>
         <Route
           path='/'
+          //passing the searched letter to the home component
           element={<Home searchInput={searchInput} />}
         />
         <Route path='/Form' element={<Form />} />
